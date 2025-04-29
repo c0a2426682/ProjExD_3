@@ -142,6 +142,9 @@ class Bomb:
 
 
 class Score:
+    """
+    スコアに関するクラス
+    """
     def __init__(self, num: int):
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.num = 0
@@ -154,6 +157,9 @@ class Score:
 
 
 class Explosion:
+    """
+    爆発エフェクトに関するクラス
+    """
     def __init__(self, bomb:"Bomb"):
         self.img = pg.image.load(f"fig/explosion.gif")
         self.imgs = [self.img,pg.transform.flip(self.img, False, True),pg.transform.flip(self.img, True, False)]
@@ -165,9 +171,6 @@ class Explosion:
         if self.life > 0:
             for img in self.imgs:
                 screen.blit(img, self.rct)
-
-
-
 
 
 def main():
