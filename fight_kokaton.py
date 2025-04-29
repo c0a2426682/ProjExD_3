@@ -153,6 +153,21 @@ class Score:
         screen.blit(self.img, self.xy)
 
 
+class Explosion:
+    def __init__(self, bomb:"Bomb"):
+        self.img = pg.image.load(f"fig/explosion.gif")
+        self.imgs = [self.img,pg.transform.flip(self.img, False, True),pg.transform.flip(self.img, True, False)]
+        self.rct = self.img.get_rect(center=bomb.rct.center)
+        self.life = 20
+
+    def update(self, screen: pg.Surface):
+        self.life -= 1
+        if self.life > 0:
+            for img in self.imgs:
+                screen.blit(img, self.rct)
+
+
+
 
 
 def main():
@@ -164,6 +179,7 @@ def main():
     beams = []
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     scr = Score(0)
+    explod = []
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -194,8 +210,14 @@ def main():
                     bombs[j] = None
                     bird.change_img(6,screen)
                     scr.num += 1
+                    explo = Explosion(bomb)
+                    explod.append(explo)
             bombs =[bomb for bomb in bombs if bomb is not None]
             beams =[beam for beam in beams if beam is not None]
+            explod =[explo for explo in explod if explo is not None]
+        for explo in explod:
+            if explo.life < 0:
+                explo = None
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
@@ -206,6 +228,8 @@ def main():
         for bomb in bombs:
             bomb.update(screen)
         scr.update(screen)
+        for explo in explod:
+            explo.update (screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
